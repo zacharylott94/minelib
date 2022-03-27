@@ -1,5 +1,5 @@
 function curl (file, url)
-  local _ = shell.run("rm ", file)
+  fs.delete(file)
   local f = io.open(file, "a")
   local src = http.get(url)
   f:write(src.readAll())
