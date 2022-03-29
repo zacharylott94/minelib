@@ -24,6 +24,8 @@ local function parse(line)
 end
 
 
+local tradelist = {}
 for line in tradeFile:lines() do
-  print(parse(line))
+  table.insert(tradelist, parse(line))
 end
+return tradelist
