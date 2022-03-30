@@ -7,7 +7,7 @@ return function(inventory)\
   return inventory.size() - filter(inventory)\
 end", '@'.."./lib/trade/emptySlots.lua" ) )
 
-package.preload[ "id" ] = assert( (loadstring or load)( "return function(i) return i end end", '@'.."./lib/id.lua" ) )
+package.preload[ "id" ] = assert( (loadstring or load)( "return function(i) return i end", '@'.."./lib/id.lua" ) )
 
 package.preload[ "list" ] = assert( (loadstring or load)( "-- while these will work with any table, they don't make sense in context.\
 -- This is strictly for tables that act as lists\
