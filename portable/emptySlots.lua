@@ -4,7 +4,7 @@ local id = require(\"id\")\
 local filter = list.filter(id)\
 \
 return function(inventory)\
-  return inventory.size() - filter(inventory)\
+  return (inventory.size() - #filter(inventory))\
 end", '@'.."./lib/trade/emptySlots.lua" ) )
 
 package.preload[ "id" ] = assert( (loadstring or load)( "return function(i) return i end", '@'.."./lib/id.lua" ) )
