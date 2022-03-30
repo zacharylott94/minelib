@@ -1,1 +1,0 @@
-luacc -o ../portable/list.lua -i ./list.lua -i ./list/ list map fold filter
