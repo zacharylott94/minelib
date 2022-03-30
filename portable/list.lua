@@ -1,56 +1,6 @@
-
----------------------------------------------------------
-----------------Auto generated code block----------------
----------------------------------------------------------
-
 do
-    local searchers = package.searchers or package.loaders
-    local origin_seacher = searchers[2]
-    searchers[2] = function(path)
-        local files =
-        {
-------------------------
--- Modules part begin --
-------------------------
-
-["map"] = function()
---------------------
--- Module: 'map'
---------------------
-return  
-  function (fun)
-    return function (t)
-      local output = {}
-      for _,item in pairs(t) do
-        table.insert(output, fun(item))
-      end
-      return output
-    end
-  end
-
-end,
-
-["fold"] = function()
---------------------
--- Module: 'fold'
---------------------
-return  
-  function (fun, start)
-    return function (t)
-      local output = start
-      for _, item in pairs(t) do 
-        output = fun(output, item)
-      end
-      return output
-    end
-  end 
-
-end,
-
-["filter"] = function()
---------------------
--- Module: 'filter'
---------------------
+local _ENV = _ENV
+package.preload[ "filter" ] = function( ... ) local arg = _G.arg;
 return function(boolFun)
   return function (t)
     local output = {}
@@ -61,23 +11,28 @@ return function(boolFun)
     return output
   end
 end
-
-end,
-
-----------------------
--- Modules part end --
-----------------------
-        }
-        if files[path] then
-            return files[path]
-        else
-            return origin_seacher(path)
-        end
-    end
 end
----------------------------------------------------------
-----------------Auto generated code block----------------
----------------------------------------------------------
+end
+
+do
+local _ENV = _ENV
+package.preload[ "fold" ] = function( ... ) local arg = _G.arg;
+return  
+  function (fun, start)
+    return function (t)
+      local output = start
+      for _, item in pairs(t) do 
+        output = fun(output, item)
+      end
+      return output
+    end
+  end
+end
+end
+
+do
+local _ENV = _ENV
+package.preload[ "list" ] = function( ... ) local arg = _G.arg;
 -- while these will work with any table, they don't make sense in context.
 -- This is strictly for tables that act as lists
 local list = {}
@@ -86,3 +41,22 @@ list.map = require("./list/map")
 list.filter = require("./list/filter")
 
 return list
+end
+end
+
+do
+local _ENV = _ENV
+package.preload[ "map" ] = function( ... ) local arg = _G.arg;
+return  
+  function (fun)
+    return function (t)
+      local output = {}
+      for _,item in pairs(t) do
+        table.insert(output, fun(item))
+      end
+      return output
+    end
+  end
+end
+end
+
