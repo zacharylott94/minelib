@@ -24,7 +24,7 @@ local itemSlots = require("itemSlots")
 
 local routeOperation = function(route)
   local totalItems = gic(route.item)(route.source.list())
-  local difference = totalItems - reserve
+  local difference = totalItems - route.reserve
   local firstAvailableSlot = itemSlots(route.item,route.source.list())[1]
   if difference > 0 then
     route.source.pushItems(route.source,firstAvailableSlot,difference)
