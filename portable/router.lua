@@ -8,12 +8,10 @@ local split = function(str, char)
   local subs = {}
   for i = 1, #str, 1 do
     local c = str:sub(i,i)
-    if (char ~= c) then goto continue
-    else 
+    if (char == c) then 
       table.insert(subs, string.sub(str, lasti, i-1))
       lasti = i +1
     end
-    ::continue::
   end
   table.insert(subs, string.sub(str, lasti))
   return subs
@@ -56,7 +54,7 @@ local function parseh(file)
 end
 
 return {
-  -- split = split, --expose only for testing
+  split = split, --expose only for testing
   parse = parse,
   parseh = parseh
 }
