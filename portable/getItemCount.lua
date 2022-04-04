@@ -94,7 +94,18 @@ local list = require("list")
 lambda.id = require("id")
 lambda.compose = require("compose")
 lambda.combine = list.fold(lambda.compose, lambda.id)
-lambda.fnot = require("fnot")
+lambda.notf = require("fnot")
+lambda.fnot = lambda.notf
+lambda.equals = function(val1)
+  return function(val2)
+    return val1 == val2
+  end
+end
+lambda.andf = function (f1, f2)
+  return function (val)
+    return f1(val) and f2(val)
+  end
+end
 return lambda
 end
 end
@@ -161,14 +172,13 @@ return list
 end
 end
 
-local list = require("list")
 local h = require("lambda")
+local list = require("list")
 
 local add = function (x,y) return x + y end
 
 local sum = list.fold(add, 0)
 
-local itemExists = list.filter(h.id)
 
 local getValue = function (key) return 
   function (t)
@@ -178,10 +188,20 @@ end
 
 local getCount = getValue("count")
 
-local getItemCount = h.combine({
-  itemExists,
-  getCount,
-  sum
+local itemHasNameOf = function (name)
+  return h.compose(
+    getValue("name"),
+    h.equals(name)
+  )
+end
+
+
+local getItemCount = function (itemName)
+  return h.combine({
+  list.filter(itemHasNameOf(itemName)),
+  list.map(getCount),
+  sum,
 })
+end
   
 return getItemCount
