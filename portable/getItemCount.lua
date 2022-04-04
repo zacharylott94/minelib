@@ -162,10 +162,26 @@ end
 end
 
 local list = require("list")
-local id = require("lambda").id
+local h = require("lambda")
 
-local filter = list.filter(id)
+local add = function (x,y) return x + y end
 
-return function(inventory)
-  return (inventory.size() - #filter(inventory.list()))
+local sum = list.fold(add, 0)
+
+local itemExists = list.filter(h.id)
+
+local getValue = function (key) return 
+  function (t)
+    return t[key]
+  end
 end
+
+local getCount = getValue("count")
+
+local getItemCount = h.combine({
+  itemExists,
+  getCount,
+  sum
+})
+  
+return getItemCount

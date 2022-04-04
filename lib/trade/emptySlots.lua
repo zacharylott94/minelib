@@ -1,5 +1,5 @@
 local list = require("list")
-local id = require("id")
+local id = require("lambda").id
 
 local filter = list.filter(id)
 
