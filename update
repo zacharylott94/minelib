@@ -2,3 +2,4 @@ wget https://raw.githubusercontent.com/zacharylott94/minelib/master/portable/cur
 curl emptySlots.lua https://raw.githubusercontent.com/zacharylott94/minelib/master/portable/emptySlots.lua
 curl getItemCount.lua https://raw.githubusercontent.com/zacharylott94/minelib/master/portable/getItemCount.lua
 curl router.lua https://raw.githubusercontent.com/zacharylott94/minelib/master/portable/router.lua
+curl update https://raw.githubusercontent.com/zacharylott94/minelib/master/update
