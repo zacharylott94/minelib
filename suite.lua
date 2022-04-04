@@ -64,3 +64,33 @@ local getItemCount = Unit.suite("getItemCount", {
 })
 
 Unit.report(getItemCount)
+
+
+local itemSlots = Unit.suite("itemSlots", {
+  Unit.test("takes a name and an item list and returns the slots that item is in", function()
+    local itemSlots = require("./portable/itemSlots")
+    local inventory = {
+      {name = "stone"},
+      {name = "stone"},
+      {name = "stone"},
+      {name = "stone"},
+      {name = "stone"},
+      nil,
+      nil,
+      {name = "dirt"},
+      nil,
+      {name = "stone"},
+      nil,
+      nil,
+      nil
+    }
+
+    return {
+      Unit.deepEquals(itemSlots("stone", inventory), {1,2,3,4,5,10}),
+      Unit.deepEquals(itemSlots("dirt", inventory), {8}),
+    }
+
+  end
+  )
+})
+Unit.report(itemSlots)
