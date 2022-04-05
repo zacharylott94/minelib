@@ -520,6 +520,6 @@ while true do
       local destination = peripheral.getName(v.destination)
       local source = peripheral.getName(v.source)
       print(string.format("Pushed %s %s from %s to %s", amount, v.item, source, destination))
+    end
   end
-
 end
