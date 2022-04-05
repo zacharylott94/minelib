@@ -496,8 +496,13 @@ local routeOperation = function(route)
   local destinationDelta = route.limit - destinationItems
   local firstAvailableSlot = itemSlots(route.item,route.source.list())[1]
   if (sourceDelta > 0) and (destinationDelta > 0) then
-    local amount = math.min(sourceDelta, destinationDelta)
-    route.source.pushItems(peripheral.getName(route.destination),firstAvailableSlot,amount)
+    local amount
+    if (route.limit > 0) then
+      amount = math.min(sourceDelta, destinationDelta)
+    else
+      amount = sourceDelta
+    end
+      route.source.pushItems(peripheral.getName(route.destination),firstAvailableSlot,amount)
   end
 
 end
