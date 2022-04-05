@@ -465,7 +465,7 @@ end
 
 local csv = require("csv")
 
-local routerTable = io.open("router.csv", "r")
+local routerTable = io.open("routertable", "r")
 
 -- {destination,source,item,reserve}[]
 local routes = csv.parseh(routerTable)
