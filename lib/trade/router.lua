@@ -41,7 +41,25 @@ local itemRouteOperation = function(route)
 end
 
 local fluidRouteOperation = function(route)
-  local amount = 1000
+  local getFluidAmount = function(peripheral)
+    local tanks = list.filter(function(t) return t.name == route.item end)(peripheral.tanks())
+    local amount = list.fold(function(t1,t2)
+      return t1.amount + t2.amount
+    end, 0)(tanks)
+    return amount
+  end
+  local sourceAmount = getFluidAmount(route.source)
+  local destinationAmount = getFluidAmount(route.destination)
+  local sourceDelta = sourceAmount - route.reserve
+  local amount
+  if (route.limit == 0) then
+    amount = sourceDelta
+  elseif (route.limit > 0) then
+    local destinationDelta = route.limit - destinationAmount
+    amount = math.min(sourceDelta, destinationDelta)
+  else
+    return false
+  end
   if (amount > 0) then
     route.source.pushFluid(peripheral.getName(route.destination), amount, route.item)
     return true
