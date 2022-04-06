@@ -391,6 +391,7 @@ while true do
       if fluidRouteOperation(v) then success = true end
     else
       if itemRouteOperation(v) then success = true end
+    end
   end
   if not success then sleep(5) end
 end
