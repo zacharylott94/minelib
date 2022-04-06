@@ -461,7 +461,9 @@ local routeOperation = function(route)
   local firstAvailableSlot = itemSlots(route.item,route.source.list())[1]
   if (sourceDelta > 0) and (destinationDelta > 0) then
     route.source.pushItems(peripheral.getName(route.destination),firstAvailableSlot,amount)
+    return true
   end
+  return false
 end
 
 while true do
