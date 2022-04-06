@@ -69,32 +69,6 @@ local _ENV = _ENV
 package.preload[ "lambda" ] = function( ... ) local arg = _G.arg;
 do
 local _ENV = _ENV
-package.preload[ "compose" ] = function( ... ) local arg = _G.arg;
-return function (f1, f2)
-  return function (arg)
-    return f2(f1(arg))
-  end
-end
-end
-end
-
-do
-local _ENV = _ENV
-package.preload[ "fnot" ] = function( ... ) local arg = _G.arg;
---because not is a reserved keyword that sorta acts like a function but isn't first class
-return function(bool) return not(bool) end
-end
-end
-
-do
-local _ENV = _ENV
-package.preload[ "id" ] = function( ... ) local arg = _G.arg;
-return function(i) return i end
-end
-end
-
-do
-local _ENV = _ENV
 package.preload[ "list" ] = function( ... ) local arg = _G.arg;
 do
 local _ENV = _ENV
@@ -157,11 +131,15 @@ end
 
 local lambda = {}
 local list = require("list")
-lambda.id = require("id")
-lambda.compose = require("compose")
+lambda.id = function(i) return i end
+lambda.compose = function (f1, f2)
+  return function (arg)
+    return f2(f1(arg))
+  end
+end
 lambda.combine = list.fold(lambda.compose, lambda.id)
-lambda.notf = require("fnot")
-lambda.fnot = lambda.notf
+lambda.notf = function(bool) return not(bool) end
+lambda.fnot = lambda.notf --so that the rename won't break old code
 lambda.equals = function(val1)
   return function(val2)
     return val1 == val2
@@ -294,32 +272,6 @@ local _ENV = _ENV
 package.preload[ "lambda" ] = function( ... ) local arg = _G.arg;
 do
 local _ENV = _ENV
-package.preload[ "compose" ] = function( ... ) local arg = _G.arg;
-return function (f1, f2)
-  return function (arg)
-    return f2(f1(arg))
-  end
-end
-end
-end
-
-do
-local _ENV = _ENV
-package.preload[ "fnot" ] = function( ... ) local arg = _G.arg;
---because not is a reserved keyword that sorta acts like a function but isn't first class
-return function(bool) return not(bool) end
-end
-end
-
-do
-local _ENV = _ENV
-package.preload[ "id" ] = function( ... ) local arg = _G.arg;
-return function(i) return i end
-end
-end
-
-do
-local _ENV = _ENV
 package.preload[ "list" ] = function( ... ) local arg = _G.arg;
 do
 local _ENV = _ENV
@@ -382,11 +334,15 @@ end
 
 local lambda = {}
 local list = require("list")
-lambda.id = require("id")
-lambda.compose = require("compose")
+lambda.id = function(i) return i end
+lambda.compose = function (f1, f2)
+  return function (arg)
+    return f2(f1(arg))
+  end
+end
 lambda.combine = list.fold(lambda.compose, lambda.id)
-lambda.notf = require("fnot")
-lambda.fnot = lambda.notf
+lambda.notf = function(bool) return not(bool) end
+lambda.fnot = lambda.notf --so that the rename won't break old code
 lambda.equals = function(val1)
   return function(val2)
     return val1 == val2
