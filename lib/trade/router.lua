@@ -10,6 +10,7 @@ local convertRawRoute = function (route)
   route.destination = peripheral.wrap(route.destination)
   route.reserve = tonumber(route.reserve)
   route.limit = tonumber(route.limit)
+  return route
 end
 
 local list = require("list")
