@@ -19,7 +19,7 @@ routes = list.map(convertRawRoute)(routes)
 local gic = require("getItemCount")
 local itemSlots = require("itemSlots")
 
-local routeOperation = function(route)
+local itemRouteOperation = function(route)
   local sourceItems = gic(route.item)(route.source.list())
   local destinationItems = gic(route.item)(route.destination.list())
   local sourceDelta = sourceItems - route.reserve
@@ -40,10 +40,26 @@ local routeOperation = function(route)
   return false
 end
 
+local fluidRouteOperation = function(route)
+  local amount = 1000
+  if (amount > 0) then
+    route.source.pushFluid(peripheral.getName(route.destination), amount, route.item)
+    return true
+  end
+  return false
+end
+
+local isFluidRoute = function(route)
+  return peripheral.hasType(route.source,"fluid_storage")
+end
+
 while true do
   local success = false
   for _,v in pairs(routes) do
-    if routeOperation(v) then success = true end
+    if isFluidRoute(v) then 
+      if fluidRouteOperation(v) then success = true end
+    else
+      if itemRouteOperation(v) then success = true end
   end
   if not success then sleep(5) end
 end

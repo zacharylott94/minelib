@@ -269,96 +269,6 @@ end
 
 do
 local _ENV = _ENV
-package.preload[ "lambda" ] = function( ... ) local arg = _G.arg;
-do
-local _ENV = _ENV
-package.preload[ "list" ] = function( ... ) local arg = _G.arg;
-do
-local _ENV = _ENV
-package.preload[ "filter" ] = function( ... ) local arg = _G.arg;
-return function(boolFun)
-  return function (t)
-    local output = {}
-    for _, item in pairs(t) do
-      if boolFun(item) then table.insert(output,item)
-      end
-    end
-    return output
-  end
-end
-end
-end
-
-do
-local _ENV = _ENV
-package.preload[ "fold" ] = function( ... ) local arg = _G.arg;
-return  
-  function (fun, start)
-    return function (t)
-      local output = start
-      for _, item in pairs(t) do 
-        output = fun(output, item)
-      end
-      return output
-    end
-  end
-end
-end
-
-do
-local _ENV = _ENV
-package.preload[ "map" ] = function( ... ) local arg = _G.arg;
-return  
-  function (fun)
-    return function (t)
-      local output = {}
-      for _,item in pairs(t) do
-        table.insert(output, fun(item))
-      end
-      return output
-    end
-  end
-end
-end
-
--- while these will work with any table, they don't make sense in context.
--- This is strictly for tables that act as lists
-local list = {}
-list.fold = require("fold")
-list.map = require("map")
-list.filter = require("filter")
-
-return list
-end
-end
-
-local lambda = {}
-local list = require("list")
-lambda.id = function(i) return i end
-lambda.compose = function (f1, f2)
-  return function (arg)
-    return f2(f1(arg))
-  end
-end
-lambda.combine = list.fold(lambda.compose, lambda.id)
-lambda.notf = function(bool) return not(bool) end
-lambda.fnot = lambda.notf --so that the rename won't break old code
-lambda.equals = function(val1)
-  return function(val2)
-    return val1 == val2
-  end
-end
-lambda.andf = function (f1, f2)
-  return function (val)
-    return f1(val) and f2(val)
-  end
-end
-return lambda
-end
-end
-
-do
-local _ENV = _ENV
 package.preload[ "list" ] = function( ... ) local arg = _G.arg;
 do
 local _ENV = _ENV
@@ -440,7 +350,7 @@ routes = list.map(convertRawRoute)(routes)
 local gic = require("getItemCount")
 local itemSlots = require("itemSlots")
 
-local routeOperation = function(route)
+local itemRouteOperation = function(route)
   local sourceItems = gic(route.item)(route.source.list())
   local destinationItems = gic(route.item)(route.destination.list())
   local sourceDelta = sourceItems - route.reserve
@@ -461,10 +371,26 @@ local routeOperation = function(route)
   return false
 end
 
+local fluidRouteOperation = function(route)
+  local amount = 1000
+  if (amount > 0) then
+    route.source.pushFluid(peripheral.getName(route.destination), amount, route.item)
+    return true
+  end
+  return false
+end
+
+local isFluidRoute = function(route)
+  return peripheral.hasType(route.source,"fluid_storage")
+end
+
 while true do
   local success = false
   for _,v in pairs(routes) do
-    if routeOperation(v) then success = true end
+    if isFluidRoute(v) then 
+      if fluidRouteOperation(v) then success = true end
+    else
+      if itemRouteOperation(v) then success = true end
   end
   if not success then sleep(5) end
 end
