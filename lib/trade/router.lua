@@ -43,7 +43,8 @@ end
 local fluidRouteOperation = function(route)
   local getFluidAmount = function(peripheral)
     local tank = list.filter(function(t) return t.name == route.item end)(peripheral.tanks())[1]
-    return tank.amount
+    if (tank ~= nil) then return tank.amount end
+    return 0
   end
   local sourceAmount = getFluidAmount(route.source)
   local destinationAmount = getFluidAmount(route.destination)
