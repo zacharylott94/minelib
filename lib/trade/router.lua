@@ -23,19 +23,17 @@ local routeOperation = function(route)
   local sourceItems = gic(route.item)(route.source.list())
   local destinationItems = gic(route.item)(route.destination.list())
   local sourceDelta = sourceItems - route.reserve
-  local destinationDelta 
   local amount
   if (route.limit == 0) then
-    destinationDelta = 1
     amount = sourceDelta
   elseif (route.limit > 0) then
-    destinationDelta = route.limit - destinationItems
+    local destinationDelta = route.limit - destinationItems
     amount = math.min(sourceDelta, destinationDelta)
   else --if limit is negative, fail
     return false
   end
   local firstAvailableSlot = itemSlots(route.item,route.source.list())[1]
-  if (sourceDelta > 0) and (destinationDelta > 0) then
+  if (amount > 0) then
     route.source.pushItems(peripheral.getName(route.destination),firstAvailableSlot,amount)
     return true
   end
