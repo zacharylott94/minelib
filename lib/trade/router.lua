@@ -44,7 +44,9 @@ local routeOperation = function(route)
 end
 
 while true do
+  local success = false
   for _,v in pairs(routes) do
-    routeOperation(v)
+    if routeOperation(v) then success = true end
   end
+  if not success then sleep(5) end
 end
