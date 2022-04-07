@@ -333,7 +333,7 @@ local csv = require("csv")
 
 local routerTable = io.open("routertable", "r")
 
--- {destination,source,item,reserve,limit}[]
+-- {destination,source,item,reserve,limit,type}[]
 local routes = csv.parseh(routerTable)
 
 local convertRawRoute = function (route)
@@ -397,7 +397,7 @@ local fluidRouteOperation = function(route)
 end
 
 local isFluidRoute = function(route)
-  return peripheral.hasType(route.source,"fluid_storage")
+  return route.type == "fluid"
 end
 
 while true do
