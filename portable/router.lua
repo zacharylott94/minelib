@@ -53,10 +53,21 @@ local function parseh(file)
 
 end
 
+--parses, treating each line as a key and value pair in a dictionary
+local function parsedict(file)
+  local dict = {}
+  for line in file:lines() do
+    local values = split(line, ",")
+    dict[values[1]] = values[2]
+  end
+  return dict
+end
+
 return {
   split = split, --expose only for testing
   parse = parse,
-  parseh = parseh
+  parseh = parseh,
+  parsedict = parsedict
 }
 end
 end
@@ -332,15 +343,28 @@ end
 local csv = require("csv")
 
 local routerTable = io.open("routertable", "r")
+local routerAliases = io.open("routeraliases", "r")
 
 -- {destination,source,item,reserve,limit,type}[]
 local routes = csv.parseh(routerTable)
+local aliases = csv.parsedict(routerAliases)
+
+local convertAliases = function (route) 
+  local convert = function (key,value)
+    return aliases[key] or value
+  end
+  for k,v in pairs(route) do
+    route[k] = convert(k,v)
+  end
+  return route
+end
 
 local convertRawRoute = function (route)
   route.source = peripheral.wrap(route.source)
   route.destination = peripheral.wrap(route.destination)
   route.reserve = tonumber(route.reserve)
   route.limit = tonumber(route.limit)
+  route = convertAliases(route)
   return route
 end
 

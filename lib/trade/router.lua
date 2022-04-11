@@ -1,15 +1,28 @@
 local csv = require("csv")
 
 local routerTable = io.open("routertable", "r")
+local routerAliases = io.open("routeraliases", "r")
 
 -- {destination,source,item,reserve,limit,type}[]
 local routes = csv.parseh(routerTable)
+local aliases = csv.parsedict(routerAliases)
+
+local convertAliases = function (route) 
+  local convert = function (key,value)
+    return aliases[key] or value
+  end
+  for k,v in pairs(route) do
+    route[k] = convert(k,v)
+  end
+  return route
+end
 
 local convertRawRoute = function (route)
   route.source = peripheral.wrap(route.source)
   route.destination = peripheral.wrap(route.destination)
   route.reserve = tonumber(route.reserve)
   route.limit = tonumber(route.limit)
+  route = convertAliases(route)
   return route
 end
 
