@@ -342,15 +342,9 @@ end
 
 local csv = require("csv")
 
-local routerTable = io.open("routertable", "r")
-local routerAliases = io.open("routeraliases", "r")
-
--- {destination,source,item,reserve,limit,type}[]
-local routes = csv.parseh(routerTable)
-local aliases = csv.parsedict(routerAliases)
-
-local convertAliases = function (route) 
+local resolveAliases = function (route) 
   local convert = function (value)
+    local aliases = csv.parsedict(io.open("routeraliases", "r"))
     if (aliases[value] ~= nil) then return aliases[value] end
     return value
   end
@@ -361,7 +355,7 @@ local convertAliases = function (route)
 end
 
 local convertRawRoute = function (route)
-  route = convertAliases(route)
+  route = resolveAliases(route)
   route.source = peripheral.wrap(route.source)
   route.destination = peripheral.wrap(route.destination)
   route.reserve = tonumber(route.reserve)
@@ -370,6 +364,9 @@ local convertRawRoute = function (route)
 end
 
 local list = require("list")
+-- {destination,source,item,reserve,limit,type}[]
+local routes = csv.parseh(io.open("routertable", "r"))
+
 routes = list.map(convertRawRoute)(routes)
 
 local gic = require("getItemCount")
