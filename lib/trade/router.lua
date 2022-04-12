@@ -18,11 +18,11 @@ local convertAliases = function (route)
 end
 
 local convertRawRoute = function (route)
+  route = convertAliases(route)
   route.source = peripheral.wrap(route.source)
   route.destination = peripheral.wrap(route.destination)
   route.reserve = tonumber(route.reserve)
   route.limit = tonumber(route.limit)
-  route = convertAliases(route)
   return route
 end
 
