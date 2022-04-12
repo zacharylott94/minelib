@@ -340,11 +340,10 @@ return list
 end
 end
 
-local csv = require("csv")
-
 local resolveAliases = function (route) 
+  local parsedict = require("csv").parsedict
+  local aliases = parsedict(io.open("routeraliases", "r"))
   local convert = function (value)
-    local aliases = csv.parsedict(io.open("routeraliases", "r"))
     if (aliases[value] ~= nil) then return aliases[value] end
     return value
   end
@@ -364,8 +363,7 @@ local convertRawRoute = function (route)
 end
 
 local list = require("list")
--- {destination,source,item,reserve,limit,type}[]
-local routes = csv.parseh(io.open("routertable", "r"))
+local routes = require("csv").parseh(io.open("routertable", "r"))
 
 routes = list.map(convertRawRoute)(routes)
 
