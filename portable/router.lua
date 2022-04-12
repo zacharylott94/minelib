@@ -350,11 +350,12 @@ local routes = csv.parseh(routerTable)
 local aliases = csv.parsedict(routerAliases)
 
 local convertAliases = function (route) 
-  local convert = function (key,value)
-    return aliases[key] or value
+  local convert = function (value)
+    if (aliases[value] ~= nil) then return aliases[value] end
+    return value
   end
   for k,v in pairs(route) do
-    route[k] = convert(k,v)
+    route[k] = convert(v)
   end
   return route
 end
