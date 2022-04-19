@@ -15,10 +15,10 @@ end
 local getCount = getValue("count")
 
 local itemHasNameOf = function (name)
-  return h.compose(
-    getValue("name"),
-    h.equals(name)
-  )
+  return function (item)
+    if (string.match(item.name, name) ~= nil) then return true end
+    return false
+  end
 end
 
 
